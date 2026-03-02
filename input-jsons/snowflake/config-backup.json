@@ -1,0 +1,213 @@
+{
+    "warehouses": {
+        "lab_wh": {
+            "name": "SF_SNOWPIPE_DYT_PIPELINE_WH",
+            "comment": "Lab warehouse for the loading data for the piepeline",
+            "warehouse_size": "X-SMALL",
+            "auto_resume": true,
+            "auto_suspend": 60,
+            "enable_query_acceleration": false,
+            "warehouse_type": "STANDARD",
+            "min_cluster_count": 1,
+            "max_cluster_count": 1,
+            "scaling_policy": "STANDARD",
+            "initially_suspended": false
+        }
+    },
+    "databases": {
+        "hrms": {
+            "name": "HRMS",
+            "comment": "Human Resource Management System database",
+            "schemas": [
+                {
+                    "name": "HR",
+                    "comment": "HR schema containing employee and organizational data",
+                    "tables": {
+                        "employees": {
+                            "name": "EMPLOYEES",
+                            "comment": "Employee information",
+                            "columns": [
+                                {
+                                    "name": "EMPLOYEE_ID",
+                                    "type": "NUMBER(6)"
+                                },
+                                {
+                                    "name": "FIRST_NAME",
+                                    "type": "VARCHAR(20)"
+                                },
+                                {
+                                    "name": "LAST_NAME",
+                                    "type": "VARCHAR(25)"
+                                },
+                                {
+                                    "name": "EMAIL",
+                                    "type": "VARCHAR(25)"
+                                },
+                                {
+                                    "name": "PHONE_NUMBER",
+                                    "type": "VARCHAR(20)"
+                                },
+                                {
+                                    "name": "HIRE_DATE",
+                                    "type": "DATE"
+                                },
+                                {
+                                    "name": "JOB_ID",
+                                    "type": "VARCHAR(10)"
+                                },
+                                {
+                                    "name": "SALARY",
+                                    "type": "NUMBER(8,2)"
+                                },
+                                {
+                                    "name": "COMMISSION_PCT",
+                                    "type": "NUMBER(2,2)"
+                                },
+                                {
+                                    "name": "MANAGER_ID",
+                                    "type": "NUMBER(6)"
+                                },
+                                {
+                                    "name": "DEPARTMENT_ID",
+                                    "type": "NUMBER(4)"
+                                }
+                            ]
+                        },
+                        "departments": {
+                            "name": "DEPARTMENTS",
+                            "comment": "Department information",
+                            "columns": [
+                                {
+                                    "name": "DEPARTMENT_ID",
+                                    "type": "NUMBER(4)"
+                                },
+                                {
+                                    "name": "DEPARTMENT_NAME",
+                                    "type": "VARCHAR(30)"
+                                },
+                                {
+                                    "name": "MANAGER_ID",
+                                    "type": "NUMBER(6)"
+                                },
+                                {
+                                    "name": "LOCATION_ID",
+                                    "type": "NUMBER(4)"
+                                }
+                            ]
+                        },
+                        "locations": {
+                            "name": "LOCATIONS",
+                            "comment": "Location information",
+                            "columns": [
+                                {
+                                    "name": "LOCATION_ID",
+                                    "type": "NUMBER(4)"
+                                },
+                                {
+                                    "name": "STREET_ADDRESS",
+                                    "type": "VARCHAR(40)"
+                                },
+                                {
+                                    "name": "POSTAL_CODE",
+                                    "type": "VARCHAR(12)"
+                                },
+                                {
+                                    "name": "CITY",
+                                    "type": "VARCHAR(30)"
+                                },
+                                {
+                                    "name": "STATE_PROVINCE",
+                                    "type": "VARCHAR(25)"
+                                },
+                                {
+                                    "name": "COUNTRY_ID",
+                                    "type": "CHAR(2)"
+                                }
+                            ]
+                        },
+                        "countries": {
+                            "name": "COUNTRIES",
+                            "comment": "Country information",
+                            "columns": [
+                                {
+                                    "name": "COUNTRY_ID",
+                                    "type": "CHAR(2)"
+                                },
+                                {
+                                    "name": "COUNTRY_NAME",
+                                    "type": "VARCHAR(40)"
+                                },
+                                {
+                                    "name": "REGION_ID",
+                                    "type": "NUMBER"
+                                }
+                            ]
+                        },
+                        "regions": {
+                            "name": "REGIONS",
+                            "comment": "Region information",
+                            "columns": [
+                                {
+                                    "name": "REGION_ID",
+                                    "type": "NUMBER"
+                                },
+                                {
+                                    "name": "REGION_NAME",
+                                    "type": "VARCHAR(25)"
+                                }
+                            ]
+                        },
+                        "jobs": {
+                            "name": "JOBS",
+                            "comment": "Job titles and salary ranges",
+                            "columns": [
+                                {
+                                    "name": "JOB_ID",
+                                    "type": "VARCHAR(10)"
+                                },
+                                {
+                                    "name": "JOB_TITLE",
+                                    "type": "VARCHAR(35)"
+                                },
+                                {
+                                    "name": "MIN_SALARY",
+                                    "type": "NUMBER(6)"
+                                },
+                                {
+                                    "name": "MAX_SALARY",
+                                    "type": "NUMBER(6)"
+                                }
+                            ]
+                        },
+                        "job_history": {
+                            "name": "JOB_HISTORY",
+                            "comment": "Employee job history",
+                            "columns": [
+                                {
+                                    "name": "EMPLOYEE_ID",
+                                    "type": "NUMBER(6)"
+                                },
+                                {
+                                    "name": "START_DATE",
+                                    "type": "DATE"
+                                },
+                                {
+                                    "name": "END_DATE",
+                                    "type": "DATE"
+                                },
+                                {
+                                    "name": "JOB_ID",
+                                    "type": "VARCHAR(10)"
+                                },
+                                {
+                                    "name": "DEPARTMENT_ID",
+                                    "type": "NUMBER(4)"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}

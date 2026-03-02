@@ -53,6 +53,31 @@ output "schemas" {
 }
 
 # ----------------------------------------------------------------------------
+# 3. File Formats
+# ----------------------------------------------------------------------------
+output "file_formats" {
+  description = "Map of file format names to their details"
+  value = {
+    for k, v in module.file_formats.file_formats : k => {
+      name                 = v.name
+      fully_qualified_name = v.fully_qualified_name
+      database             = v.database
+      schema               = v.schema
+      format_type          = v.format_type
+      comment              = v.comment
+    }
+  }
+}
+
+# ----------------------------------------------------------------------------
+# 4. Stages
+# ----------------------------------------------------------------------------
+output "stages" {
+  description = "Stage outputs from module"
+  value       = module.stage
+}
+
+# ----------------------------------------------------------------------------
 # Tables
 # ----------------------------------------------------------------------------
 output "tables" {

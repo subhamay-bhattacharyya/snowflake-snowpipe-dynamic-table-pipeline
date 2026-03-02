@@ -66,8 +66,11 @@ variable "data_object_provisioner_role" {
   default     = ""
 }
 
-
-
+variable "ingest_object_provisioner_role" {
+  description = "Snowflake role for ingest object provisioning operations"
+  type        = string
+  default     = ""
+}
 # ----------------------------------------------------------------------------
 # Seed Data
 # ----------------------------------------------------------------------------

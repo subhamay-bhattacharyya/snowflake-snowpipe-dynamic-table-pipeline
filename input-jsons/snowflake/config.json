@@ -1,8 +1,8 @@
 {
   "warehouses": {
     "lab_wh": {
-      "name": "DYT_LAB_01_WH",
-      "comment": "Lab warehouse for tutorial exercises",
+      "name": "SF_SNOWPIPE_DYT_PIPELINE_WH",
+      "comment": "Lab warehouse for the loading data for the piepeline",
       "warehouse_size": "X-SMALL",
       "auto_resume": true,
       "auto_suspend": 60,
@@ -15,92 +15,147 @@
     }
   },
   "databases": {
-    "hrms": {
-      "name": "HRMS",
-      "comment": "Human Resource Management System database",
+    "dyt_db": {
+      "name": "SF_SNOWPIPE_DYT_PIPELINE_DB",
+      "comment": "Database for Snowpipe and Dynamic Tables data pipeline",
       "schemas": [
         {
-          "name": "HR",
-          "comment": "HR schema containing employee and organizational data",
-          "tables": {
-            "employees": {
-              "name": "EMPLOYEES",
-              "comment": "Employee information",
-              "columns": [
-                { "name": "EMPLOYEE_ID", "type": "NUMBER(6)" },
-                { "name": "FIRST_NAME", "type": "VARCHAR(20)" },
-                { "name": "LAST_NAME", "type": "VARCHAR(25)" },
-                { "name": "EMAIL", "type": "VARCHAR(25)" },
-                { "name": "PHONE_NUMBER", "type": "VARCHAR(20)" },
-                { "name": "HIRE_DATE", "type": "DATE" },
-                { "name": "JOB_ID", "type": "VARCHAR(10)" },
-                { "name": "SALARY", "type": "NUMBER(8,2)" },
-                { "name": "COMMISSION_PCT", "type": "NUMBER(2,2)" },
-                { "name": "MANAGER_ID", "type": "NUMBER(6)" },
-                { "name": "DEPARTMENT_ID", "type": "NUMBER(4)" }
-              ]
-            },
-            "departments": {
-              "name": "DEPARTMENTS",
-              "comment": "Department information",
-              "columns": [
-                { "name": "DEPARTMENT_ID", "type": "NUMBER(4)" },
-                { "name": "DEPARTMENT_NAME", "type": "VARCHAR(30)" },
-                { "name": "MANAGER_ID", "type": "NUMBER(6)" },
-                { "name": "LOCATION_ID", "type": "NUMBER(4)" }
-              ]
-            },
-            "locations": {
-              "name": "LOCATIONS",
-              "comment": "Location information",
-              "columns": [
-                { "name": "LOCATION_ID", "type": "NUMBER(4)" },
-                { "name": "STREET_ADDRESS", "type": "VARCHAR(40)" },
-                { "name": "POSTAL_CODE", "type": "VARCHAR(12)" },
-                { "name": "CITY", "type": "VARCHAR(30)" },
-                { "name": "STATE_PROVINCE", "type": "VARCHAR(25)" },
-                { "name": "COUNTRY_ID", "type": "CHAR(2)" }
-              ]
-            },
-            "countries": {
-              "name": "COUNTRIES",
-              "comment": "Country information",
-              "columns": [
-                { "name": "COUNTRY_ID", "type": "CHAR(2)" },
-                { "name": "COUNTRY_NAME", "type": "VARCHAR(40)" },
-                { "name": "REGION_ID", "type": "NUMBER" }
-              ]
-            },
-            "regions": {
-              "name": "REGIONS",
-              "comment": "Region information",
-              "columns": [
-                { "name": "REGION_ID", "type": "NUMBER" },
-                { "name": "REGION_NAME", "type": "VARCHAR(25)" }
-              ]
-            },
-            "jobs": {
-              "name": "JOBS",
-              "comment": "Job titles and salary ranges",
-              "columns": [
-                { "name": "JOB_ID", "type": "VARCHAR(10)" },
-                { "name": "JOB_TITLE", "type": "VARCHAR(35)" },
-                { "name": "MIN_SALARY", "type": "NUMBER(6)" },
-                { "name": "MAX_SALARY", "type": "NUMBER(6)" }
-              ]
-            },
-            "job_history": {
-              "name": "JOB_HISTORY",
-              "comment": "Employee job history",
-              "columns": [
-                { "name": "EMPLOYEE_ID", "type": "NUMBER(6)" },
-                { "name": "START_DATE", "type": "DATE" },
-                { "name": "END_DATE", "type": "DATE" },
-                { "name": "JOB_ID", "type": "VARCHAR(10)" },
-                { "name": "DEPARTMENT_ID", "type": "NUMBER(4)" }
-              ]
+          "name": "SOURCE",
+          "comment": "Schema for ingesting raw data from external sources via Snowpipe",
+          "file_formats": {
+            "csv_file_format": {
+              "name": "CSV_FILE_FORMAT",
+              "type": "CSV",
+              "compression": "AUTO",
+              "field_delimiter": ",",
+              "record_delimiter": "\n",
+              "skip_header": 1,
+              "field_optionally_enclosed_by": "\"",
+              "trim_space": true,
+              "null_if": ["NULL", "null", ""],
+              "empty_field_as_null": true,
+              "error_on_column_count_mismatch": false,
+              "escape_unenclosed_field": "\\",
+              "comment": "CSV file format for structured data ingestion"
+            }
+          },
+          "stages": {
+            "raw_internal_stg": {
+              "name": "RAW_INTERNAL_STG",
+              "stage_type": "internal",
+              "file_format": "CSV_FILE_FORMAT",
+              "directory_enabled": true,
+              "comment": "Internal stage for staging raw data files before loading into tables"
             }
           }
+        },
+        {
+          "name": "RAW",
+          "comment": "Schema for storing unprocessed data in its original format",
+          "tables": {
+            "employee": {
+              "name": "EMPLOYEE",
+              "table_type": "PERMANENT",
+              "comment": "Employee data table for storing raw employee records",
+              "columns": [
+                {
+                  "name": "EMP_ID",
+                  "type": "TEXT",
+                  "nullable": false,
+                  "comment": "Employee unique identifier"
+                },
+                {
+                  "name": "FIRST_NAME",
+                  "type": "TEXT",
+                  "nullable": true,
+                  "comment": "Employee first name"
+                },
+                {
+                  "name": "LAST_NAME",
+                  "type": "TEXT",
+                  "nullable": true,
+                  "comment": "Employee last name"
+                },
+                {
+                  "name": "DATE_OF_BIRTH",
+                  "type": "DATE",
+                  "nullable": true,
+                  "comment": "Employee date of birth"
+                },
+                {
+                  "name": "DATE_OF_JOINING",
+                  "type": "DATE",
+                  "nullable": true,
+                  "comment": "Employee joining date"
+                },
+                {
+                  "name": "EMAIL_ADDRESS",
+                  "type": "TEXT",
+                  "nullable": true,
+                  "comment": "Employee email address"
+                },
+                {
+                  "name": "DEPARTMENT",
+                  "type": "TEXT",
+                  "nullable": true,
+                  "comment": "Employee department"
+                },
+                {
+                  "name": "DESIGNATION",
+                  "type": "TEXT",
+                  "nullable": true,
+                  "comment": "Employee job designation"
+                },
+                {
+                  "name": "LEVEL",
+                  "type": "TEXT",
+                  "nullable": true,
+                  "comment": "Employee level in organization"
+                },
+                {
+                  "name": "OFFICE_LOCATION",
+                  "type": "TEXT",
+                  "nullable": true,
+                  "comment": "Employee office location"
+                },
+                {
+                  "name": "ACTIVE",
+                  "type": "TEXT",
+                  "nullable": true,
+                  "comment": "Employee active status"
+                },
+                {
+                  "name": "LOAD_TS",
+                  "type": "TIMESTAMP",
+                  "nullable": true,
+                  "comment": "Record load timestamp"
+                },
+                {
+                  "name": "LOAD_ROW_NUMBER",
+                  "type": "NUMBER",
+                  "nullable": true,
+                  "comment": "Row number from source file"
+                },
+                {
+                  "name": "LOAD_FILE_NAME",
+                  "type": "TEXT",
+                  "nullable": true,
+                  "comment": "Source file name"
+                }
+              ],
+              "primary_key": {
+                "keys": ["EMP_ID"]
+              }
+            }
+          }
+        },
+        {
+          "name": "CLEAN",
+          "comment": "Schema for validated and transformed data ready for processing"
+        },
+        {
+          "name": "CONSUMPTION",
+          "comment": "Schema for curated data optimized for analytics and reporting"
         }
       ]
     }

@@ -9,7 +9,7 @@ terraform {
     organization = "subhamay-bhattacharyya-projects"
 
     workspaces {
-      name = "snowflake-dynamic-table-tutorial"
+      name = "snowflake-snowpipe-dynamic-table-pipeline"
     }
   }
 }
